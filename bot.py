@@ -10,28 +10,17 @@ def hello_user() -> str:
 def add_user(name: str, phone_num: str) -> str:
     if validate_phone_number(phone_num):
         user_dict[name] = phone_num
-        # print(user_dict)
         return f"User {name} added"
-    else:
-        return "Invalid phone number. Please enter a valid phone number."
 
 
 def change_user(name: str, phone_num: str) -> str:
-    if name in user_dict:
-        if validate_phone_number(phone_num):
-            user_dict[name] = phone_num
-            return f"Phone number for user {name} was changed"
-        else:
-            return "Invalid phone number. Please enter a valid phone number."
-    else:
-        return f"There is no user named {name}"
+    verify = user_dict[name]
+    user_dict[name] = phone_num
+    return f"Phone number for user {verify} was changed"
 
 
 def phone_user(name: str) -> str:
-    if name in user_dict:
-        return f"{name}: {user_dict[name]}"
-    else:
-        return "Contact not found."
+    return f"{name}: {user_dict[name]}"
 
 
 def show_all() -> str:
@@ -41,7 +30,7 @@ def show_all() -> str:
     if contacts:
         return "\n".join(contacts)
     else:
-        return "No contacts found."
+        return contacts[0]
 
 
 def end_cycle() -> str:
@@ -53,12 +42,13 @@ def input_error(func):
         try:
             result = func(*args)
             return result
+
         except KeyError:
-            return "KeyError: Invalid command. Please try again."
+            return "KeyError: Invalid user name. Please try again."
         except ValueError:
-            return "ValueError: Invalid command arguments. Please try again."
+            return "ValueError: Invalid phone number. Please try again."
         except IndexError:
-            return "IndexError: Invalid command arguments. Please try again."
+            return "IndexError: contact list is empty. Please try again."
 
     return inner
 
