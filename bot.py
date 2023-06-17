@@ -8,15 +8,20 @@ def hello_user() -> str:
 
 
 def add_user(name: str, phone_num: str) -> str:
-    if validate_phone_number(phone_num):
+    if validate_phone_number(phone_num) == "validate":
         user_dict[name] = phone_num
         return f"User {name} added"
+    else:
+        return validate_phone_number(phone_num)
 
 
 def change_user(name: str, phone_num: str) -> str:
     verify = user_dict[name]
-    user_dict[name] = phone_num
-    return f"Phone number for user {verify} was changed"
+    if validate_phone_number(phone_num) == "validate":
+        user_dict[name] = phone_num
+        return f"Phone number for user {verify} was changed"
+    else:
+        return validate_phone_number(phone_num)
 
 
 def phone_user(name: str) -> str:
@@ -53,10 +58,13 @@ def input_error(func):
     return inner
 
 
-def validate_phone_number(phone_num: str) -> bool:
+def validate_phone_number(phone_num: str) -> str:
     # Validate phone number format
-    pattern = r"^\+?\d+$"
-    return re.match(pattern, phone_num) is not None
+    pattern = r"^(?:\+?380|0)\d{9}$"
+    if re.match(pattern, phone_num):
+        return "validate"
+    else:
+        return "Incorrect phone number. Please try again."
 
 
 COMMAND_DICT = {
